@@ -1,7 +1,91 @@
 import Head from "next/head";
 import Link from "next/link";
 
+import { useEffect } from "react";
+import postcss from "postcss"
+import tailwindcss as 'tailwindcss'
+
+interface ClassInfo {
+  name: string;
+  properties: { property: string; value: string }[];
+}
+
+async function convertTailwindClassesToCSS() {
+  try {
+    const css = await postcss([tailwindcss]).process(tailwindClasses.join(' '));
+    console.log(css.content);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+const findPropertiesForClassName = (className: string) => {
+  // const element = document.createElement("div");
+  // element.classList.add(className);
+  // document.body.appendChild(element);
+  // const computedStyle = window.getComputedStyle(element);
+  // const properties = Array.from(computedStyle).map((property) => {
+  //   return { property, value: computedStyle.getPropertyValue(property) };
+  // });
+  // document.body.removeChild(element);
+  // if (properties.length > 0) {
+  //   const classInfo: ClassInfo = {
+  //     name: className,
+  //     properties: properties,
+  //   };
+  //   return classInfo;
+  // } else {
+  //   return null;
+  // }
+};
+
 export default function Home() {
+  useEffect(() => {
+    // Function to collect unique CSS class names
+    const collectClassNames = () => {
+      const elements = Array.from(document.querySelectorAll("*"));
+      const classNames: ClassInfo[] = [];
+
+      elements.forEach((element) => {
+        if (element instanceof HTMLElement) {
+          // console.log(element);
+          // console.log(element.classList);
+          const classList = element.classList;
+
+          if (classList.length !== 0 && classList[0] !== "") {
+            for (const className of classList) {
+              if (
+                !classNames.some((classInfo) => classInfo.name === className)
+              ) {
+                const classInfo = findPropertiesForClassName(className);
+                if (classInfo) {
+                  classNames.push(classInfo);
+                }
+              }
+            }
+          }
+
+          // const computedStyle = getComputedStyle(element);
+          // const elementClassNames = Array.from(computedStyle).filter(
+          //   (property) => property.startsWith("class")
+          // );
+          // elementClassNames.forEach((className) => {
+          //   const classes = className.split(" ");
+          //   classes.forEach((c) => classNames.add(c));
+          // });
+        }
+      });
+
+      console.log(classNames);
+      convertTailwindClassesToCSS()
+
+      // const classList = Array.from(classNames);
+      // console.log(classList);
+    };
+
+    collectClassNames();
+  }, []);
+
   return (
     <>
       <Head>

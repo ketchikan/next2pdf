@@ -1,0 +1,10 @@
+IDEA: 
+
+Basically I want to be able to create PDF's in different size format, starting with A4,
+from JSX/TSX files that will also work with typescript.
+
+Ideas: 
+-use webpack or Babel to convert the jsx/tsx into html and css. 
+- Do I need to create/find some sort of method to convert the tailwind? Can I just 
+    get the file to include the relevant classes from the Tailwind directory?
+    
